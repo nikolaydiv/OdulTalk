@@ -7,8 +7,7 @@ html, body {
 
     overscroll-behavior-x: contain;
     overflow-x: hidden;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
 }
 
 .app {
@@ -71,7 +70,6 @@ h1 {
 }
 
 #phrases-container {
-    flex: 1;
     padding: 10px;
     display: flex;
     flex-direction: column;
