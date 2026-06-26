@@ -6,7 +6,6 @@ from services.phrase_service import PhrasesService
 
 import os
 import sys
-import json
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):

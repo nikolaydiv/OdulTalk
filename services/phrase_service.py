@@ -3,14 +3,17 @@ from pathlib import Path
 import sys
 import os
 
-def resource_path(relative_path: str) -> str:
-    base_path = getattr(sys, "_MEIPASS", os.path.abspath("."))
-    return str(Path(base_path) / relative_path)
+def resource_path(relative_path: str) -> Path:
+    if hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / relative_path
+
+    project_root = Path(__file__).resolve().parent.parent
+    return project_root / relative_path
 
 class PhrasesService:
     def __init__(self, json_path: str):
         self.json_path = json_path
-        self.phrases = []
+        self._phrases = []
         self._load_phrases()
 
     def _load_phrases(self):
