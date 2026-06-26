@@ -30,6 +30,16 @@ const categoryIcons = {
     "Счет.": "🔢"
 };
 
+function renderPreserveScroll() {
+    const scroll = container.scrollTop;
+
+    render();
+
+    requestAnimationFrame(() => {
+        container.scrollTop = scroll;
+    });
+}
+
 function updateModeButtons() {
     showFavoritesBtn.classList.remove("active");
     showAllBtn.classList.remove("active");
@@ -64,7 +74,7 @@ function goBack() {
     if (viewMode === "phrases") {
         viewMode = "categories";
         selectedCategory = null;
-        render();
+        renderPreserveScroll();
     }
 }
 
@@ -84,7 +94,7 @@ async function loadPhrases() {
     const res = await fetch("/api/phrases");
     phrases = await res.json();
 
-    render();
+    renderPreserveScroll();
 }
 
 // switch fav
@@ -93,7 +103,7 @@ function toggleFavorite(id) {
     else favorites.add(id);
 
     saveFavorites();
-    render();
+    renderPreserveScroll();
 }
 
 function addBackButton() {
@@ -107,7 +117,7 @@ function addBackButton() {
         showOnlyFavorites = false;
         searchInput.value = "";
 
-        render();
+        renderPreserveScroll();
     });
 
     container.prepend(back);
@@ -156,7 +166,7 @@ function renderCategoriesScreen() {
             selectedCategory = cat;
             showOnlyFavorites = false;
             viewMode = "phrases";
-            render();
+            renderPreserveScroll();
         });
 
         container.appendChild(btn);
@@ -264,7 +274,7 @@ searchInput.addEventListener("input", () => {
         selectedCategory = null;
     }
 
-    render();
+    renderPreserveScroll();
 });
 
 // mode buttons
@@ -273,7 +283,7 @@ showFavoritesBtn.addEventListener("click", () => {
     selectedCategory = null;
     viewMode = "phrases";
     updateModeButtons();
-    render();
+    renderPreserveScroll();
 });
 
 showAllBtn.addEventListener("click", () => {
@@ -282,7 +292,7 @@ showAllBtn.addEventListener("click", () => {
     searchInput.value = "";
     viewMode = "categories";
     updateModeButtons();
-    render();
+    renderPreserveScroll();
 });
 
 settingsBtn.addEventListener("click", () => {
