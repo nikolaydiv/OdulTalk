@@ -1,0 +1,279 @@
+const container = document.getElementById("phrases-container");
+const searchInput = document.getElementById("search");
+
+const showFavoritesBtn = document.getElementById("show-favorites");
+const showAllBtn = document.getElementById("show-all");
+const settingsBtn = document.getElementById("settings-btn");
+const modal = document.getElementById("settings-modal");
+const closeModal = document.getElementById("close-modal");
+
+const splash = document.getElementById("splash-screen");
+
+let phrases = [];
+let favorites = new Set();
+let showOnlyFavorites = false;
+let viewMode = "categories";
+let selectedCategory = null;
+
+const categoryIcons = {
+    "Приветствие. Встреча. – Приветствиелэк. Ньэнугунул.": "👋",
+    "Знакомство. Семья. – Ньэлэйтэйоол. Шоромоньулпэ.": "👨‍👩‍👧",
+    "Этикетные слова.": "🙏",
+    "Здоровье. – Шоромо пэнги.": "🏥",
+    "Времена года. – Ньэмолҕил параапэ.": "🌦️",
+    "Школа.": "🎓",
+    "Наш поселок.": "🏘️",
+    "Охота (поход за дом). Рыболовство. – Нумэ йэкльиэ эйрэл. Анил иксьиил.": "🎣",
+    "Досуг.": "🎉",
+    "Счет.": "🔢"
+};
+
+
+// load fav
+function loadFavorites() {
+    const saved = localStorage.getItem("favorites");
+    if (saved) favorites = new Set(JSON.parse(saved));
+}
+
+// save fav
+function saveFavorites() {
+    localStorage.setItem("favorites", JSON.stringify([...favorites]));
+}
+
+// load phrases
+async function loadPhrases() {
+    const res = await fetch("/api/phrases");
+    phrases = await res.json();
+
+    render();
+}
+
+// switch fav
+function toggleFavorite(id) {
+    if (favorites.has(id)) favorites.delete(id);
+    else favorites.add(id);
+
+    saveFavorites();
+    render();
+}
+
+function addBackButton() {
+    const back = document.createElement("button");
+    back.textContent = "← Назад";
+    back.classList.add("back-btn");
+
+    back.addEventListener("click", () => {
+        viewMode = "categories";
+        selectedCategory = null;
+        showOnlyFavorites = false;
+        searchInput.value = "";
+
+        render();
+    });
+
+    container.prepend(back);
+}
+
+// audio
+function playAudio(fileName) {
+    if (!fileName) return;
+
+    const audio = new Audio(`/static/audio/${fileName}`);
+
+    audio.play().catch(err => {
+        console.log("Audio error:", err);
+    });
+}
+
+// get categories
+function getCategories() {
+    const set = new Set();
+    phrases.forEach(p => set.add(p.category));
+    return [...set];
+}
+
+function renderCategoriesScreen() {
+    container.innerHTML = "";
+
+    const cats = getCategories();
+
+    cats.forEach(cat => {
+        const btn = document.createElement("div");
+        const icon = categoryIcons[cat] || "📁";
+
+        btn.classList.add("category-card");
+        const count = phrases.filter(p => p.category === cat).length;
+        btn.innerHTML = `
+            <div>
+                <div>${icon} ${cat}</div>
+                <div class="category-count">
+                    ${phrases.filter(p => p.category === cat).length} фраз
+                </div>
+            </div>
+            <span>›</span>
+        `;
+
+        btn.addEventListener("click", () => {
+            selectedCategory = cat;
+            showOnlyFavorites = false;
+            viewMode = "phrases",
+            render();
+        });
+
+        container.appendChild(btn);
+    });
+}
+
+// filter + fav mode
+function getFilteredPhrases() {
+    const searchValue = searchInput.value.toLowerCase();
+
+    return phrases.filter(p => {
+        const matchText =
+            p.ru.toLowerCase().includes(searchValue) ||
+            p.ykg.toLowerCase().includes(searchValue);
+
+        const matchFav = !showOnlyFavorites || favorites.has(p.id);
+
+        const matchCategory =
+            !selectedCategory || p.category === selectedCategory;
+
+        return matchText && matchFav && matchCategory;
+    });
+}
+
+function render() {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    container.scrollTop = 0;
+
+    if (viewMode === "categories") {
+        renderCategoriesScreen();
+        return;
+    }
+
+    renderPhrasesScreen();
+}
+
+
+
+// render
+function renderPhrasesScreen() {
+    container.innerHTML = "";
+    addBackButton();
+
+    const data = getFilteredPhrases();
+
+    data.forEach(p => {
+        const card = document.createElement("div");
+        card.classList.add("phrase-card");
+
+        const isFav = favorites.has(p.id);
+
+        card.style.cursor = "pointer";
+
+        card.innerHTML = `
+            <div class="card-header">
+
+                <div class="ru">
+                    ${p.ru}
+                </div>
+
+                <div class="actions">
+                    <button class="audio-btn">🔊</button>
+                    <button class="fav-btn">
+                        ${isFav ? "⭐" : "☆"}
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="ykg">
+                ${p.ykg}
+            </div>
+        `;
+
+        card.querySelector(".fav-btn").addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleFavorite(p.id);
+            });
+
+        const audioBtn = card.querySelector(".audio-btn");
+
+        card.querySelector(".audio-btn").addEventListener("click", (e) => {
+            e.stopPropagation();
+
+            playAudio(p.audio);
+        });
+
+        if (!p.audio) {
+            audioBtn.style.opacity = "0.3";
+            audioBtn.style.pointerEvents = "none";
+        };
+
+        container.appendChild(card);
+    });
+}
+
+// search
+searchInput.addEventListener("input", () => {
+    if (viewMode === "categories") {
+        viewMode = "phrases";
+        selectedCategory = null;
+    }
+
+    render();
+});
+
+// mode buttons
+showFavoritesBtn.addEventListener("click", () => {
+    showOnlyFavorites = true;
+    selectedCategory = null;
+    viewMode = "phrases";
+    render();
+});
+
+showAllBtn.addEventListener("click", () => {
+    showOnlyFavorites = false;
+    selectedCategory = null;
+    searchInput.value = "";
+    viewMode = "categories";
+    render();
+});
+
+settingsBtn.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+});
+
+closeModal.addEventListener("click", () => {
+    modal.classList.add("hidden");
+});
+
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.classList.add("hidden")
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const splash = document.getElementById("splash-screen");
+
+    if (!splash) return;
+
+    setTimeout(() => {
+        splash.style.opacity = "0";
+        splash.style.transition = "0.4s ease";
+
+        setTimeout(() => {
+            splash.style.display = "none";
+        }, 400);
+
+    }, 800);
+});
+
+// start
+loadFavorites();
+loadPhrases();

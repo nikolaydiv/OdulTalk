@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>OdulTalk</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="app">
+
+    <div class="top-bar">
+
+        <div class="header-row">
+            <h1>OdulTalk</h1>
+
+            <button id="settings-btn" class="settings-btn">⚙️</button>
+        </div>
+
+        <input id="search" type="text" placeholder="🔍 Поиск..." />
+
+        <div class="controls">
+
+
+            <button id="show-favorites">⭐</button>
+            <button id="show-all">Все</button>
+
+        </div>
+
+    </div>
+
+    <div id="phrases-container"></div>
+
+</div>
+
+<div id="settings-modal" class="modal hidden">
+
+    <div class="modal-content">
+
+        <h2>О приложении</h2>
+
+        <p><b>OdulTalk</b> - русско-юкагирский разговорник</p>
+
+        <p>Версия: 1.0</p>
+
+        <hr>
+
+        <h3>Контакты</h3>
+
+        <p>Email: nikolaydiv@gmail.com</p>
+        <p>Telegram: @nickdiv</p>
+
+        <button id="close-modal">Закрыть</button>
+
+    </div>
+
+</div>
+
+<script src="/static/js/app.js"></script>
+
+</body>
+
+<div id="splash-screen">
+     <div class="splash-content">
+          <img src="/static/img/splash.png" alt="OdulTalk">
+    </div>
+</div>
+
+</html>
