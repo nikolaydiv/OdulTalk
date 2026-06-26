@@ -14,6 +14,8 @@ let favorites = new Set();
 let showOnlyFavorites = false;
 let viewMode = "categories";
 let selectedCategory = null;
+let touchStartX = 0;
+let touchEndX = 0;
 
 const categoryIcons = {
     "Приветствие. Встреча. – Приветствиелэк. Ньэнугунул.": "👋",
@@ -28,6 +30,30 @@ const categoryIcons = {
     "Счет.": "🔢"
 };
 
+function handleTouchStart(e) {
+    touchStartX = e.changedTouches[0].screenX;
+}
+
+function handleTouchEnd(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipeGesture();
+}
+
+function handleSwipeGesture() {
+    const swipeDistance = touchEndX - touchStartX;
+
+    if (swipeDistance > 80) {
+        goBack();
+    }
+}
+
+function goBack() {
+    if (viewMode === "phrases") {
+        viewMode = "categories";
+        selectedCategory = null;
+        render();
+    }
+}
 
 // load fav
 function loadFavorites() {
@@ -273,6 +299,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }, 800);
 });
+
+container.addEventListener("touchStart", handleTouchStart, false);
+container.addEventListener("touched", handleTouchEnd, false);
 
 // start
 loadFavorites();
