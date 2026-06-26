@@ -308,7 +308,7 @@ container.addEventListener("touchend", (e) => {
     const diff = touchEndX - touchStartX;
 
     if (diff > 80) {
-        gpBack();
+        goBack();
     }
 });
 
