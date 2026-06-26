@@ -4,6 +4,7 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #f2f3f5;
+    font-size: 16px;
 }
 
 /* ===== APP WRAPPER ===== */
@@ -12,6 +13,12 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+.wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+    pedding: 16px;
 }
 
 /* ===== TOP BAR (как в приложениях) ===== */
@@ -26,8 +33,8 @@ body {
 }
 
 h1 {
-    margin: 0 0 10px 0;
-    font-size: 20px;
+    margin: 12px 0 16px;
+    font-size: 24px;
     text-align: center;
 }
 
@@ -35,12 +42,12 @@ h1 {
 
 #search {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     border-radius: 12px;
-    border: 1px solid #ddd;
-    font-size: 16px;
+    border: 1px solid #ccc;
+    font-size: 18px;
     box-sizing: border-box;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
 }
 
 /* ===== CONTROLS ===== */
@@ -82,9 +89,10 @@ h1 {
 
 .phrase-card {
     background: white;
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 14px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 12px;
 
     /* mobile feel */
     transition: transform 0.1s;
@@ -102,12 +110,14 @@ h1 {
 
 .ru {
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .ykg {
     margin-top: 8px;
-    font-size: 15px;
+    font-size: 16px;
+    margin-top: 6px;
+    opacity: 0.85;
     color: #555;
 }
 
@@ -239,12 +249,12 @@ h1 {
 .category-card {
     background: #ffffff;
     border: 1px solid #dcdcdc;
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 18px;
     margin-bottom: 12px;
 
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 500;
 
     cursor: pointer;
 
@@ -277,4 +287,15 @@ h1 {
     font-size: 13px;
     color: #777;
     margin-top: 4px;
+}
+
+.toolbar button,
+.toolbar select {
+    font-size: 16px;
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+button {
+    font-size: 16px;
 }
