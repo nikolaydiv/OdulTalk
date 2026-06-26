@@ -30,6 +30,19 @@ const categoryIcons = {
     "Счет.": "🔢"
 };
 
+function updateModeButtons() {
+    showFavoritesBtn.classList.remove("active");
+    showAllBtn.classList.remove("active");
+
+    if (showOnlyFavorites) {
+        showFavoritesBtn.classList.add("active");
+    }
+
+    if (!showOnlyFavorites) {
+        showAllBtn.classList.add("active");
+    }
+}
+
 function handleTouchStart(e) {
     touchStartX = e.changedTouches[0].screenX;
 }
@@ -142,7 +155,7 @@ function renderCategoriesScreen() {
         btn.addEventListener("click", () => {
             selectedCategory = cat;
             showOnlyFavorites = false;
-            viewMode = "phrases",
+            viewMode = "phrases";
             render();
         });
 
@@ -177,10 +190,11 @@ function render() {
 
     if (viewMode === "categories") {
         renderCategoriesScreen();
-        return;
+    } else {
+        renderPhrasesScreen();
     }
 
-    renderPhrasesScreen();
+    updateModeButtons();
 }
 
 
@@ -209,8 +223,8 @@ function renderPhrasesScreen() {
 
                 <div class="actions">
                     <button class="audio-btn">🔊</button>
-                    <button class="fav-btn">
-                        ${isFav ? "⭐" : "☆"}
+                    <button class="fav-btn ${isFav ? "active" : ""}">
+                        ${isFav ? "❤️" : "🤍"}
                     </button>
                 </div>
 
@@ -258,6 +272,7 @@ showFavoritesBtn.addEventListener("click", () => {
     showOnlyFavorites = true;
     selectedCategory = null;
     viewMode = "phrases";
+    updateModeButtons();
     render();
 });
 
@@ -266,6 +281,7 @@ showAllBtn.addEventListener("click", () => {
     selectedCategory = null;
     searchInput.value = "";
     viewMode = "categories";
+    updateModeButtons();
     render();
 });
 

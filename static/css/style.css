@@ -3,7 +3,9 @@ body {
     font-family: Arial, sans-serif;
     background: #f2f3f5;
     font-size: 16px;
+
     overscroll-behavior-x: contain;
+    overflow-x: hidden;
 }
 
 .app {
@@ -80,7 +82,7 @@ h1 {
     padding: 14px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     margin-bottom: 12px;
-    transition: transform 0.1s;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .phrase-card:active {
@@ -109,8 +111,36 @@ h1 {
 .actions button {
     border: none;
     background: transparent;
-    font-size: 18px;
+    font-size: 22px;
     cursor: pointer;
+    transition: background 0.15s ease;
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+}
+.actions button:active {
+    background: rgba(0, 0, 0, 0.08);
+    transform: scale(0.95);
+}
+.actions button.fav-btn {
+    font-size: 22px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+    transition: transform 0.15s ease;
+}
+.actions button.fav-btn.active {
+    transform: scale(0.9);
 }
 
 @media (max-width: 600px) {
@@ -272,13 +302,23 @@ h1 {
     padding: 10px 12px;
     border-radius: 10px;
 }
+.controls button {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.controls button.active {
+    background: #dbeafe !important;
+    color: #1d4ed8 !important;
+    font-weight: 600;
+    border: 1px solid #93c5fd !important;
+    transition: all 0.15s ease;
+}
 
 button {
     font-size: 16px;
-}
-
-html, body {
-    width: 100%;
-    overflow-x: hidden;
-    overscroll-behavior-x: contain;
 }
