@@ -1,4 +1,5 @@
-body {
+html, body {
+    height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
     background: #f2f3f5;
@@ -6,10 +7,12 @@ body {
 
     overscroll-behavior-x: contain;
     overflow-x: hidden;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 .app {
-    height: 100vh;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -69,7 +72,6 @@ h1 {
 
 #phrases-container {
     flex: 1;
-    overflow-y: auto;
     padding: 10px;
     display: flex;
     flex-direction: column;
