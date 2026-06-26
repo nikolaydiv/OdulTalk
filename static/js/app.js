@@ -300,8 +300,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 800);
 });
 
-container.addEventListener("touchStart", handleTouchStart, false);
-container.addEventListener("touched", handleTouchEnd, false);
+container.addEventListener("touchstart", (e) => {
+    touchStartX = e.touches[0].clientX;
+}, { passive: true});
+container.addEventListener("touchend", (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchEndX - touchStartX;
+
+    if (diff > 80) {
+        gpBack();
+    }
+});
+
+document.body.style.overscrollBehaviorX = "contain";
 
 // start
 loadFavorites();

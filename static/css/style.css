@@ -3,6 +3,7 @@ body {
     font-family: Arial, sans-serif;
     background: #f2f3f5;
     font-size: 16px;
+    overscroll-behavior-x: contain;
 }
 
 .app {
@@ -279,4 +280,5 @@ button {
 html, body {
     width: 100%;
     overflow-x: hidden;
+    overscroll-behavior-x: contain;
 }
