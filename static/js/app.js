@@ -16,6 +16,7 @@ let viewMode = "categories";
 let selectedCategory = null;
 let touchStartX = 0;
 let touchEndX = 0;
+let currentAudio = null;
 
 const categoryIcons = {
     "Приветствие. Встреча. – Приветствиелэк. Ньэнугунул.": "👋",
@@ -127,11 +128,31 @@ function addBackButton() {
 function playAudio(fileName) {
     if (!fileName) return;
 
-    const audio = new Audio(`/static/audio/${fileName}`);
+    if (
+        currentAudio &&
+        !currentAudio.paused &&
+        currentAudio.src.endsWith(fileName)
+    ) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+        return;
+    }
 
-    audio.play().catch(err => {
-        console.log("Audio error:", err);
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+
+    currentAudio = new Audio(`/static/audio/${fileName}`);
+
+    currentAudio.play().catch(err => {
+        console.log("Audio error: ", err);
     });
+
+    currentAudio.onended = () => {
+        currentAudio = null;
+    };
 }
 
 // get categories
